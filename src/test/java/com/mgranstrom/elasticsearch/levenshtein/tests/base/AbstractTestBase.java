@@ -61,21 +61,4 @@ public abstract class AbstractTestBase {
             node.client().admin().cluster().prepareHealth().setWaitForYellowStatus().execute().actionGet();
         }
     }
-
-    @Before
-    public void setUp() throws Exception {
-        // We delete the index before we start any test
-        try {
-            node.client().admin().indices().delete(new DeleteIndexRequest(indexName())).actionGet();
-            // We wait for one second to let ES delete the index
-            Thread.sleep(1000);
-        } catch (IndexMissingException e) {
-            // Index does not exist... Fine
-        }
-
-        // Creating the index with mappings
-        node.client().admin().indices().create(new CreateIndexRequest(indexName())).actionGet();
-        Thread.sleep(1000);
-
-    }
 }

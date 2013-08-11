@@ -38,6 +38,7 @@ public class LevenshteinSuggesterRestAction extends BaseRestHandler {
             while((line = br.readLine()) != null) {
                 list.add(TermAndFrequency.GetTermAndFreq(line,1));
             }
+            br.close();
             suggester.build(new TermAndFrequencyIterator(list));
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,11 +53,23 @@ public class LevenshteinSuggesterRestAction extends BaseRestHandler {
             lookup = request.param("q");
         }
         else{
-            lookup = "swss";
+            XContentBuilder errorBuilder;
+            try{
+                errorBuilder = jsonBuilder()
+                        .startObject()
+                            .field("Error", "Must provide q param to levenshtein suggester")
+                        .endObject();
+                RestResponse errorResponse = new XContentRestResponse(request,RestStatus.BAD_REQUEST, errorBuilder);
+                channel.sendResponse(errorResponse);
+                return;
+            }
+            catch(IOException e){
+
+            }
         }
         List<Lookup.LookupResult> result = suggester.lookup(lookup,false,3);
         long elapsedTime = System.currentTimeMillis() - start;
-        XContentBuilder builder = null;
+        XContentBuilder builder;
         try {
             builder = jsonBuilder();
             builder.startObject();
