@@ -8,10 +8,6 @@ import org.junit.*;
 import java.io.IOException;
 
 public class LevenshteinTest extends AbstractTestBase {
-    @Override
-    public long waitingTime() throws Exception {
-        return 2;
-    }
 
     @Test
     public void SimpleIntegrationTest() throws IOException {

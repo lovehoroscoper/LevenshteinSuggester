@@ -26,12 +26,6 @@ public abstract class AbstractTestBase {
         return this.getClass().getSimpleName().toLowerCase();
     }
 
-    /**
-     * Define the waiting time in seconds before launching a test
-     * @return Waiting time (in seconds)
-     */
-    abstract public long waitingTime() throws Exception;
-
     protected HttpClient getHttpClient(){
         return new HttpClient("http://localhost:9200");
     }
